@@ -1,6 +1,8 @@
 
 import software.amazon.awssdk.async.AsyncRequestProvider;
 import software.amazon.awssdk.async.AsyncResponseHandler;
+import software.amazon.awssdk.auth.ProfileCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -18,6 +20,7 @@ public class Main {
 
     private static final String BUCKET = "photoviewerstore";
     private static final String KEY = "photo";
+    private static final String USER = "adampiech7";
 
     public static void main(String[] args) {
         putObject();
@@ -25,14 +28,21 @@ public class Main {
     }
 
     private static void putObject() {
-        S3AsyncClient client = S3AsyncClient.create();
+        S3AsyncClient client = S3AsyncClient
+                .builder()
+                .region(Region.US_WEST_2)
+                .credentialsProvider(ProfileCredentialsProvider
+                        .builder()
+                        .profileName(USER)
+                        .build())
+                .build();
 
         CompletableFuture<PutObjectResponse> future = client.putObject(
                 PutObjectRequest.builder()
                         .bucket(BUCKET)
                         .key(KEY)
                         .build(),
-                AsyncRequestProvider.fromFile(Paths.get("~" + File.separator + "file.txt"))
+                AsyncRequestProvider.fromFile(Paths.get("/home/ubuntu/file.txt"))
         );
 
         future.whenComplete((resp, err) -> {
@@ -50,14 +60,21 @@ public class Main {
 
     private static void getObject() {
 
-        S3AsyncClient client = S3AsyncClient.create();
+        S3AsyncClient client = S3AsyncClient
+                .builder()
+                .region(Region.US_WEST_2)
+                .credentialsProvider(ProfileCredentialsProvider
+                        .builder()
+                        .profileName(USER)
+                        .build())
+                .build();
 
         final CompletableFuture<Void> future = client.getObject(
                 GetObjectRequest.builder()
                         .bucket(BUCKET)
                         .key(KEY)
                         .build(),
-                AsyncResponseHandler.toFile(Paths.get("~" + File.separator + "file2")));
+                AsyncResponseHandler.toFile(Paths.get("/home/ubuntu/file.txt")));
 
         future.whenComplete((resp, err) -> {
             try {
