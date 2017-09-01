@@ -20,7 +20,6 @@ public class Main {
 
     private static final String BUCKET = "photoviewerstore";
     private static final String KEY = "photo";
-    private static final String USER = "adampiech7";
 
     public static void main(String[] args) {
         putObject();
@@ -28,14 +27,7 @@ public class Main {
     }
 
     private static void putObject() {
-        S3AsyncClient client = S3AsyncClient
-                .builder()
-                .region(Region.US_WEST_2)
-                .credentialsProvider(ProfileCredentialsProvider
-                        .builder()
-                        .profileName(USER)
-                        .build())
-                .build();
+        S3AsyncClient client = S3AsyncClient.create();
 
         CompletableFuture<PutObjectResponse> future = client.putObject(
                 PutObjectRequest.builder()
@@ -60,21 +52,14 @@ public class Main {
 
     private static void getObject() {
 
-        S3AsyncClient client = S3AsyncClient
-                .builder()
-                .region(Region.US_WEST_2)
-                .credentialsProvider(ProfileCredentialsProvider
-                        .builder()
-                        .profileName(USER)
-                        .build())
-                .build();
+        S3AsyncClient client = S3AsyncClient.create();
 
         final CompletableFuture<Void> future = client.getObject(
                 GetObjectRequest.builder()
                         .bucket(BUCKET)
                         .key(KEY)
                         .build(),
-                AsyncResponseHandler.toFile(Paths.get("/home/ubuntu/file.txt")));
+                AsyncResponseHandler.toFile(Paths.get("/home/ubuntu/file2")));
 
         future.whenComplete((resp, err) -> {
             try {
