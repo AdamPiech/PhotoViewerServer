@@ -1,4 +1,6 @@
 
+import image.ImageProcessing;
+import image.ImageSimpleOperations;
 import software.amazon.awssdk.async.AsyncRequestProvider;
 import software.amazon.awssdk.async.AsyncResponseHandler;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -7,6 +9,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import software.amazon.awssdk.utils.FunctionalUtils;
 
+import java.awt.image.BufferedImage;
 import java.nio.file.Paths;
 import java.util.concurrent.CompletableFuture;
 
@@ -16,16 +19,23 @@ import java.util.concurrent.CompletableFuture;
 public class Main {
 
     private static final String BUCKET = "photoviewerstore";
-    private static final String KEY = "file";
+    private static final String KEY = "image.png";
 
     public static void main(String[] args) {
-        putObject("/home/ubuntu/file.txt");
+        getObject("/home/ubuntu/file.txt");
+
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        getObject("/home/ubuntu/file.txt");
+
+        System.out.println(" ===================== PROCESSING ===================== ");
+        BufferedImage image = ImageSimpleOperations.openImage("/home/ubuntu/file.txt");
+        image = ImageProcessing.getImageInSepia(image);
+        ImageSimpleOperations.saveImage(image, "/home/ubuntu/file.txt");
+
+        putObject("/home/ubuntu/file.txt");
     }
 
     private static void putObject(String filePath) {
