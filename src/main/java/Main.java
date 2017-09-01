@@ -1,15 +1,12 @@
 
 import software.amazon.awssdk.async.AsyncRequestProvider;
 import software.amazon.awssdk.async.AsyncResponseHandler;
-import software.amazon.awssdk.auth.ProfileCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import software.amazon.awssdk.utils.FunctionalUtils;
 
-import java.io.File;
 import java.nio.file.Paths;
 import java.util.concurrent.CompletableFuture;
 
@@ -19,24 +16,24 @@ import java.util.concurrent.CompletableFuture;
 public class Main {
 
     private static final String BUCKET = "photoviewerstore";
-    private static final String KEY = "photo";
+    private static final String KEY = "image.png";
 
     public static void main(String[] args) {
-        putObject();
-        getObject();
+        System.out.println(" ===================== PUT ===================== ");
+        putObject("/home/ubuntu/file.txt");
+        System.out.println(" ===================== GET ===================== ");
+        getObject("/home/ubuntu/file2");
     }
 
-    private static void putObject() {
+    private static void putObject(String filePath) {
         S3AsyncClient client = S3AsyncClient.create();
-
         CompletableFuture<PutObjectResponse> future = client.putObject(
                 PutObjectRequest.builder()
                         .bucket(BUCKET)
                         .key(KEY)
                         .build(),
-                AsyncRequestProvider.fromFile(Paths.get("/home/ubuntu/file.txt"))
+                AsyncRequestProvider.fromFile(Paths.get(filePath))
         );
-
         future.whenComplete((resp, err) -> {
             try {
                 if (resp != null) {
@@ -50,17 +47,14 @@ public class Main {
         });
     }
 
-    private static void getObject() {
-
+    private static void getObject(String filePath) {
         S3AsyncClient client = S3AsyncClient.create();
-
         final CompletableFuture<Void> future = client.getObject(
                 GetObjectRequest.builder()
                         .bucket(BUCKET)
                         .key(KEY)
                         .build(),
-                AsyncResponseHandler.toFile(Paths.get("/home/ubuntu/file2")));
-
+                AsyncResponseHandler.toFile(Paths.get(filePath)));
         future.whenComplete((resp, err) -> {
             try {
                 if (resp != null) {
@@ -72,7 +66,6 @@ public class Main {
                 FunctionalUtils.invokeSafely(client::close);
             }
         });
-
     }
 
 
