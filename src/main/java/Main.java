@@ -16,13 +16,16 @@ import java.util.concurrent.CompletableFuture;
 public class Main {
 
     private static final String BUCKET = "photoviewerstore";
-    private static final String KEY = "image.png";
+    private static final String KEY = "file";
 
     public static void main(String[] args) {
-        System.out.println(" ===================== PUT ===================== ");
         putObject("/home/ubuntu/file.txt");
-        System.out.println(" ===================== GET ===================== ");
-        getObject("/home/ubuntu/file2");
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        getObject("/home/ubuntu/file.txt");
     }
 
     private static void putObject(String filePath) {
@@ -36,6 +39,7 @@ public class Main {
         );
         future.whenComplete((resp, err) -> {
             try {
+                System.out.println(" ===================== PUT ===================== ");
                 if (resp != null) {
                     System.out.println(resp);
                 } else {
@@ -57,6 +61,7 @@ public class Main {
                 AsyncResponseHandler.toFile(Paths.get(filePath)));
         future.whenComplete((resp, err) -> {
             try {
+                System.out.println(" ===================== GET ===================== ");
                 if (resp != null) {
                     System.out.println(resp);
                 } else {
