@@ -60,12 +60,6 @@ public class Main {
                 AsyncResponseHandler.toFile(Paths.get(filePath)));
         future.whenComplete((resp, err) -> {
             try {
-
-                System.out.println(" ===================== PROCESSING ===================== ");
-                BufferedImage image = ImageSimpleOperations.openImage(LINUX_PATH);
-                image = ImageProcessing.getImageInSepia(image);
-                ImageSimpleOperations.saveImage(image, LINUX_PATH);
-                
                 if (resp != null) {
                     System.out.println(resp);
                 } else {
@@ -73,6 +67,10 @@ public class Main {
                 }
             } finally {
                 FunctionalUtils.invokeSafely(client::close);
+                System.out.println(" ===================== PROCESSING ===================== ");
+                BufferedImage image = ImageSimpleOperations.openImage(LINUX_PATH);
+                image = ImageProcessing.getImageInSepia(image);
+                ImageSimpleOperations.saveImage(image, LINUX_PATH);
             }
         });
     }
