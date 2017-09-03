@@ -21,21 +21,11 @@ public class Main {
     private static final String BUCKET = "photoviewerstore";
     private static final String KEY = "image.png";
 
+    private static final String LINUX_PATH = "~/file.png";
+
     public static void main(String[] args) {
-        getObject("/home/ubuntu/file.txt");
-
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(" ===================== PROCESSING ===================== ");
-        BufferedImage image = ImageSimpleOperations.openImage("/home/ubuntu/file.txt");
-        image = ImageProcessing.getImageInSepia(image);
-        ImageSimpleOperations.saveImage(image, "/home/ubuntu/file.txt");
-
-        putObject("/home/ubuntu/file.txt");
+        getObject(LINUX_PATH);
+        putObject(LINUX_PATH);
     }
 
     private static void putObject(String filePath) {
@@ -49,7 +39,6 @@ public class Main {
         );
         future.whenComplete((resp, err) -> {
             try {
-                System.out.println(" ===================== PUT ===================== ");
                 if (resp != null) {
                     System.out.println(resp);
                 } else {
@@ -71,7 +60,12 @@ public class Main {
                 AsyncResponseHandler.toFile(Paths.get(filePath)));
         future.whenComplete((resp, err) -> {
             try {
-                System.out.println(" ===================== GET ===================== ");
+
+                System.out.println(" ===================== PROCESSING ===================== ");
+                BufferedImage image = ImageSimpleOperations.openImage(LINUX_PATH);
+                image = ImageProcessing.getImageInSepia(image);
+                ImageSimpleOperations.saveImage(image, LINUX_PATH);
+                
                 if (resp != null) {
                     System.out.println(resp);
                 } else {
