@@ -104,7 +104,7 @@ public class S3Store {
     public static void putObjects(String dirPath) {
         DefaultAWSCredentialsProviderChain credentialProviderChain = new DefaultAWSCredentialsProviderChain();
         TransferManager tm = new TransferManager(credentialProviderChain.getCredentials());
-        MultipleFileUpload upload = tm.uploadDirectory(BUCKET, BUCKET_IMAGES_FOLDER, new File(dirPath), false);
+        MultipleFileUpload upload = tm.uploadDirectory(BUCKET, BUCKET_IMAGES_FOLDER, new File(dirPath), true);
         try {
             upload.waitForCompletion();
         } catch (AmazonClientException amazonClientException) {

@@ -1,4 +1,3 @@
-import image.ImageSimpleOperations;
 import storage.S3Store;
 import utils.Util;
 
@@ -9,8 +8,7 @@ import utils.Util;
 public class Main {
 
     public static void main(String[] args) {
-        ImageSimpleOperations.createDirectory(Util.IMAGE_DIRECTORY_PATH);
-        S3Store.getObjects(Util.IMAGE_DIRECTORY_PATH);
+        S3Store.putObjects(Util.IMAGE_DIRECTORY_PATH);
     }
 
 }
