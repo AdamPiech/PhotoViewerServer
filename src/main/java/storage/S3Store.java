@@ -11,10 +11,7 @@ import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.ListObjectsV2Request;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
-import com.amazonaws.services.s3.transfer.Download;
-import com.amazonaws.services.s3.transfer.MultipleFileDownload;
-import com.amazonaws.services.s3.transfer.TransferManager;
-import com.amazonaws.services.s3.transfer.Upload;
+import com.amazonaws.services.s3.transfer.*;
 import software.amazon.awssdk.async.AsyncRequestProvider;
 import software.amazon.awssdk.async.AsyncResponseHandler;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -104,7 +101,18 @@ public class S3Store {
         });
     }
 
-    public static void putObjects() {
+    public static void putObjects(String dirPath) {
+        DefaultAWSCredentialsProviderChain credentialProviderChain = new DefaultAWSCredentialsProviderChain();
+        TransferManager tm = new TransferManager(credentialProviderChain.getCredentials());
+        MultipleFileUpload upload = tm.uploadDirectory(BUCKET, BUCKET_IMAGES_FOLDER, new File(dirPath), false);
+        try {
+            upload.waitForCompletion();
+        } catch (AmazonClientException amazonClientException) {
+            amazonClientException.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        tm.shutdownNow();
     }
 
     public static void getObjects(String dirPath) {
