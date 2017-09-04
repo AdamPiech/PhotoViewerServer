@@ -9,6 +9,7 @@ public class Image {
 
     private BufferedImage image;
     private String name;
+    private String extension;
 
     public BufferedImage getImage() {
         return image;
@@ -24,6 +25,14 @@ public class Image {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
     }
 
 }
