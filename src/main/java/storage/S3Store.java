@@ -12,6 +12,7 @@ import com.amazonaws.services.s3.model.ListObjectsV2Request;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.amazonaws.services.s3.transfer.Download;
+import com.amazonaws.services.s3.transfer.MultipleFileDownload;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
 import software.amazon.awssdk.async.AsyncRequestProvider;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static utils.Util.BUCKET;
+import static utils.Util.*;
 
 /**
  * Created by Adam Piech on 2017-09-04.
@@ -36,12 +37,10 @@ import static utils.Util.BUCKET;
 
 public class S3Store {
 
-    private static final String KEY = "";
-
-    public static void putObject(String filePath) {
+    public static void putObject(String filePath, String key) {
         DefaultAWSCredentialsProviderChain credentialProviderChain = new DefaultAWSCredentialsProviderChain();
         TransferManager tm = new TransferManager(credentialProviderChain.getCredentials());
-        Upload upload = tm.upload(BUCKET, KEY, new File(filePath));
+        Upload upload = tm.upload(BUCKET, key, new File(filePath));
         try {
             upload.waitForCompletion();
         } catch (AmazonClientException amazonClientException) {
@@ -52,10 +51,10 @@ public class S3Store {
         tm.shutdownNow();
     }
 
-    public static void getObject(String filePath) {
+    public static void getObject(String filePath, String key) {
         DefaultAWSCredentialsProviderChain credentialProviderChain = new DefaultAWSCredentialsProviderChain();
         TransferManager tm = new TransferManager(credentialProviderChain.getCredentials());
-        Download download = tm.download(BUCKET, KEY, new File(filePath));
+        Download download = tm.download(BUCKET, key, new File(filePath));
         try {
             download.waitForCompletion();
         } catch (AmazonClientException amazonClientException) {
@@ -66,12 +65,12 @@ public class S3Store {
         tm.shutdownNow();
     }
 
-    public static void putObjectAsync(String filePath) {
+    public static void putObjectAsync(String filePath, String key) {
         S3AsyncClient client = S3AsyncClient.create();
         CompletableFuture<PutObjectResponse> future = client.putObject(
                 PutObjectRequest.builder()
                         .bucket(BUCKET)
-                        .key(KEY)
+                        .key(key)
                         .build(),
                 AsyncRequestProvider.fromFile(Paths.get(filePath))
         );
@@ -86,12 +85,12 @@ public class S3Store {
         });
     }
 
-    public static void getObjectAsync(String filePath) {
+    public static void getObjectAsync(String filePath, String key) {
         S3AsyncClient client = S3AsyncClient.create();
         final CompletableFuture<Void> future = client.getObject(
                 GetObjectRequest.builder()
                         .bucket(BUCKET)
-                        .key(KEY)
+                        .key(key)
                         .build(),
                 AsyncResponseHandler.toFile(Paths.get(filePath)));
         future.whenComplete((resp, err) -> {
@@ -108,7 +107,18 @@ public class S3Store {
     public static void putObjects() {
     }
 
-    public static void getObjects() {
+    public static void getObjects(String dirPath) {
+        DefaultAWSCredentialsProviderChain credentialProviderChain = new DefaultAWSCredentialsProviderChain();
+        TransferManager tm = new TransferManager(credentialProviderChain.getCredentials());
+        MultipleFileDownload download = tm.downloadDirectory(BUCKET, BUCKET_IMAGES_FOLDER, new File(dirPath));
+        try {
+            download.waitForCompletion();
+        } catch (AmazonClientException amazonClientException) {
+            amazonClientException.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        tm.shutdownNow();
     }
 
     public static List<String> listObjects() {

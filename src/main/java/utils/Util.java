@@ -6,6 +6,7 @@ package utils;
 public class Util {
 
     public static final String BUCKET = "photoviewerstore";
+    public static final String BUCKET_IMAGES_FOLDER = "images/";
 
     public static final String IMAGE_DIRECTORY_PATH = "/home/ubuntu/images/";
 

@@ -1,4 +1,6 @@
+import image.ImageSimpleOperations;
 import storage.S3Store;
+import utils.Util;
 
 /**
  * Created by Adam Piech on 2017-09-01.
@@ -7,9 +9,8 @@ import storage.S3Store;
 public class Main {
 
     public static void main(String[] args) {
-        for (String s : S3Store.listObjects()) {
-            System.out.println(" ========================= " + s);
-        }
+        ImageSimpleOperations.createDirectory(Util.IMAGE_DIRECTORY_PATH);
+        S3Store.getObjects(Util.IMAGE_DIRECTORY_PATH);
     }
 
 }
