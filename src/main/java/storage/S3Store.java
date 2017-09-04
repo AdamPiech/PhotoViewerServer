@@ -24,6 +24,8 @@ import software.amazon.awssdk.utils.FunctionalUtils;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static utils.Util.BUCKET;
@@ -109,22 +111,26 @@ public class S3Store {
     public static void getObjects() {
     }
 
-    public static void listObjects() {
+    public static List<String> listObjects() {
         AmazonS3 s3client = new AmazonS3Client(new ProfileCredentialsProvider());
+        List<String> objectKeys = new ArrayList<>();
         try {
-            final ListObjectsV2Request req = new ListObjectsV2Request().withBucketName("").withMaxKeys(2);
+            ListObjectsV2Request req = new ListObjectsV2Request().withBucketName(BUCKET).withMaxKeys(2);
             ListObjectsV2Result result;
             do {
                 result = s3client.listObjectsV2(req);
                 for (S3ObjectSummary objectSummary : result.getObjectSummaries()) {
-                    System.out.println(" - " + objectSummary.getKey() + "  " + "(size = " + objectSummary.getSize() + ")");
+                    objectKeys.add(objectSummary.getKey());
                 }
                 req.setContinuationToken(result.getNextContinuationToken());
             } while(result.isTruncated() == true );
             s3client.shutdown();
         } catch (AmazonServiceException ase) {
+            ase.printStackTrace();
         } catch (AmazonClientException ace) {
+            ace.printStackTrace();
         }
+        return objectKeys;
     }
 
     public static void deleteObject(String key) {

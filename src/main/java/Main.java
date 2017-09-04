@@ -7,8 +7,9 @@ import storage.S3Store;
 public class Main {
 
     public static void main(String[] args) {
-        S3Store.deleteObject("");
-//        S3Store.deleteObject("");
+        for (String s : S3Store.listObjects()) {
+            System.out.println(" ========================= " + s);
+        }
     }
 
 }
