@@ -14,17 +14,26 @@ public class ImageSimpleOperations {
         try {
             return ImageIO.read(new File(filePath));
         } catch (IOException ioException) {
+            ioException.printStackTrace();
             return null;
         }
     }
 
-    public static boolean saveImage(BufferedImage image, String filePath) {
+    public static boolean saveImage(BufferedImage image, String filePath, String extension) {
         try {
-            ImageIO.write(image,"png", new File(filePath));
+            ImageIO.write(image, extension, new File(filePath));
         } catch (IOException ioException) {
+            ioException.printStackTrace();
             return false;
         }
         return true;
+    }
+
+    public static void createDirectory(String dirPath) {
+        File directory = new File(dirPath);
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
     }
 
 }

@@ -7,8 +7,8 @@ import java.awt.image.BufferedImage;
  */
 public class Image {
 
-    BufferedImage image;
-    String name;
+    private BufferedImage image;
+    private String name;
 
     public BufferedImage getImage() {
         return image;
