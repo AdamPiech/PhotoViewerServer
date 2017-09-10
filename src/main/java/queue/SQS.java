@@ -24,7 +24,8 @@ public class SQS {
     public void sendQueueMessage(String message) {
         SendMessageRequest send_msg_request = new SendMessageRequest()
                 .withQueueUrl(getQueueURL())
-                .withMessageBody(message);
+                .withMessageBody(message)
+                .withDelaySeconds(1);
         sqs.sendMessage(send_msg_request);
     }
 
