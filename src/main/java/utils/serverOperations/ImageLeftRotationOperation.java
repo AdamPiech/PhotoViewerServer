@@ -13,7 +13,8 @@ public class ImageLeftRotationOperation implements IOperation {
     @Override
     public void execute(String imageName, String imagePath) {
         BufferedImage image = openImage(imagePath + imageName);
-        leftRotation(image);
+        image = leftRotation(image);
+        saveImage(image, imagePath, imageName.split(".")[1]);
     }
 
 }

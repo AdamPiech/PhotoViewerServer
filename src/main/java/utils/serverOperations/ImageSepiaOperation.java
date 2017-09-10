@@ -13,7 +13,8 @@ public class ImageSepiaOperation implements IOperation {
     @Override
     public void execute(String imageName, String imagePath) {
         BufferedImage image = openImage(imagePath + imageName);
-        getImageInSepia(image);
+        image = getImageInSepia(image);
+        saveImage(image, imagePath, imageName.split(".")[1]);
     }
 
 }

@@ -13,7 +13,8 @@ public class ImageGrayScaleOperation implements IOperation {
     @Override
     public void execute(String imageName, String imagePath) {
         BufferedImage image = openImage(imagePath + imageName);
-        getImageInGrayScale(image);
+        image = getImageInGrayScale(image);
+        saveImage(image, imagePath, imageName.split(".")[1]);
     }
 
 }

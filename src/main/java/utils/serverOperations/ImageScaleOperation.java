@@ -13,7 +13,8 @@ public class ImageScaleOperation implements IOperation {
     @Override
     public void execute(String imageName, String imagePath) {
         BufferedImage image = openImage(imagePath + imageName);
-        scale(image, 0.5);
+        image = scale(image, 0.5);
+        saveImage(image, imagePath, imageName.split(".")[1]);
     }
 
 }
