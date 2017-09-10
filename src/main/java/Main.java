@@ -1,5 +1,6 @@
-import storage.S3Store;
-import utils.Util;
+import queue.SQS;
+
+import java.util.Random;
 
 /**
  * Created by Adam Piech on 2017-09-01.
@@ -8,7 +9,11 @@ import utils.Util;
 public class Main {
 
     public static void main(String[] args) {
-        S3Store.putObjects(Util.IMAGE_DIRECTORY_PATH);
+        Random random = new Random();
+
+        SQS sqs = new SQS();
+        sqs.sendQueueMessage("DUPA " + random.nextInt());
+        sqs.receiveQueueMessage();
     }
 
 }
