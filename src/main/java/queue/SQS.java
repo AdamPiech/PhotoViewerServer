@@ -6,7 +6,6 @@ import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static utils.Util.SQS_NAME;
 
