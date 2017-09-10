@@ -19,7 +19,6 @@ public class Util {
     public static final String GRAY_SCALE_IMAGE_SQS_MESSAGE = "GRAY-SCALE-IMAGE";
     public static final String SEPIA_IMAGE_SQS_MESSAGE = "SEPIA-IMAGE";
     public static final String REMOVE_IMAGE_SQS_MESSAGE = "REMOVE-IMAGE";
-    public static final String DONE_SQS_MESSAGE = "DONE";
 
     public static final String SQS_MESSAGE_SEPARATOR = ": ";
 

@@ -4,9 +4,11 @@ import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
+import utils.Util;
 
 import java.util.List;
 
+import static utils.Util.SQS_MESSAGE_SEPARATOR;
 import static utils.Util.SQS_NAME;
 
 /**
@@ -28,14 +30,14 @@ public class SQS {
         sqs.sendMessage(send_msg_request);
     }
 
-    public String receiveQueueMessages() {
+    public utils.Message receiveQueueMessages() {
         List<Message> messages = sqs.receiveMessage(getQueueURL()).getMessages();
         String message = null;
         for (Message m : messages) {
             message = m.getBody();
             sqs.deleteMessage(getQueueURL(), m.getReceiptHandle());
         }
-        return message;
+        return new utils.Message(message.split(SQS_MESSAGE_SEPARATOR)[0], message.split(SQS_MESSAGE_SEPARATOR)[1]);
     }
 
     public String getQueueURL() {

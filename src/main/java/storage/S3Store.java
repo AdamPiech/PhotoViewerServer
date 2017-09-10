@@ -34,7 +34,7 @@ import static utils.Util.*;
 
 public class S3Store {
 
-    public static void putObject(String filePath, String key) {
+    public static void putObject(String key, String filePath) {
         DefaultAWSCredentialsProviderChain credentialProviderChain = new DefaultAWSCredentialsProviderChain();
         TransferManager tm = new TransferManager(credentialProviderChain.getCredentials());
         Upload upload = tm.upload(BUCKET_NAME, key, new File(filePath));
@@ -48,7 +48,7 @@ public class S3Store {
         tm.shutdownNow();
     }
 
-    public static void getObject(String filePath, String key) {
+    public static void getObject(String key, String filePath) {
         DefaultAWSCredentialsProviderChain credentialProviderChain = new DefaultAWSCredentialsProviderChain();
         TransferManager tm = new TransferManager(credentialProviderChain.getCredentials());
         Download download = tm.download(BUCKET_NAME, key, new File(filePath));
@@ -62,7 +62,7 @@ public class S3Store {
         tm.shutdownNow();
     }
 
-    public static void putObjectAsync(String filePath, String key) {
+    public static void putObjectAsync(String key, String filePath) {
         S3AsyncClient client = S3AsyncClient.create();
         CompletableFuture<PutObjectResponse> future = client.putObject(
                 PutObjectRequest.builder()

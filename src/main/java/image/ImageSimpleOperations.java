@@ -36,8 +36,8 @@ public class ImageSimpleOperations {
         }
     }
 
-    public static void removeImage(String filePath) {
-        File imageFile = new File(filePath);
+    public static void removeImage(String fileName, String filePath) {
+        File imageFile = new File(filePath + fileName);
         if (!imageFile.exists()) {
             imageFile.delete();
         }
