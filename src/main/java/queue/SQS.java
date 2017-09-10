@@ -6,6 +6,7 @@ import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static utils.Util.SQS_NAME;
 
@@ -27,13 +28,14 @@ public class SQS {
         sqs.sendMessage(send_msg_request);
     }
 
-    public List<String> receiveQueueMessage() {
+    public String receiveQueueMessages() {
         List<Message> messages = sqs.receiveMessage(getQueueURL()).getMessages();
+        String message = null;
         for (Message m : messages) {
-            System.out.println(m.getBody());
+            message = m.getBody();
             sqs.deleteMessage(getQueueURL(), m.getReceiptHandle());
         }
-        return null;
+        return message;
     }
 
     public String getQueueURL() {

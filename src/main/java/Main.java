@@ -11,9 +11,20 @@ public class Main {
     public static void main(String[] args) {
         Random random = new Random();
 
-        SQS sqs = new SQS();
-        sqs.sendQueueMessage("DUPA " + random.nextInt());
-        sqs.receiveQueueMessage();
+        try {
+            SQS sqs = new SQS();
+            System.out.println("Sending");
+            for (int index = 0; index > 10; index++) {
+                sqs.sendQueueMessage("DUPA " + random.nextInt());
+            }
+            System.out.println("Receive");
+            for (int index = 0; index > 10; index++) {
+                System.out.println(sqs.receiveQueueMessages());
+            }
+
+        } catch (Exception e) {
+        }
+
     }
 
 }
