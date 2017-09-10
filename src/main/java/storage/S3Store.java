@@ -37,7 +37,7 @@ public class S3Store {
     public static void putObject(String key, String filePath) {
         DefaultAWSCredentialsProviderChain credentialProviderChain = new DefaultAWSCredentialsProviderChain();
         TransferManager tm = new TransferManager(credentialProviderChain.getCredentials());
-        Upload upload = tm.upload(BUCKET_NAME, key, new File(filePath));
+        Upload upload = tm.upload(BUCKET_NAME, key, new File(filePath + key));
         try {
             upload.waitForCompletion();
         } catch (AmazonClientException amazonClientException) {
@@ -51,7 +51,7 @@ public class S3Store {
     public static void getObject(String key, String filePath) {
         DefaultAWSCredentialsProviderChain credentialProviderChain = new DefaultAWSCredentialsProviderChain();
         TransferManager tm = new TransferManager(credentialProviderChain.getCredentials());
-        Download download = tm.download(BUCKET_NAME, key, new File(filePath));
+        Download download = tm.download(BUCKET_NAME, key, new File(filePath + key));
         try {
             download.waitForCompletion();
         } catch (AmazonClientException amazonClientException) {

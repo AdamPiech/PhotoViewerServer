@@ -37,6 +37,9 @@ public class SQS {
             message = m.getBody();
             sqs.deleteMessage(getQueueURL(), m.getReceiptHandle());
         }
+        try {
+            com.amazonaws.http.IdleConnectionReaper.shutdown();
+        } catch (Throwable t) {}
         return new utils.Message(message.split(SQS_MESSAGE_SEPARATOR)[0], message.split(SQS_MESSAGE_SEPARATOR)[1]);
     }
 

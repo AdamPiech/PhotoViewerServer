@@ -1,15 +1,12 @@
 package services;
-
-import image.ImageSimpleOperations;
 import queue.SQS;
-import storage.S3Store;
 import utils.Message;
 import utils.serverOperations.IOperation;
 import utils.serverOperations.OperationsType;
 
 import static image.ImageSimpleOperations.createDirectory;
 import static image.ImageSimpleOperations.removeImage;
-import static storage.S3Store.getObject;
+import static storage.S3Store.*;
 import static utils.Util.*;
 
 /**
@@ -36,7 +33,7 @@ public class Server implements Runnable {
         getObject(message.getFileName(), IMAGE_DIRECTORY_PATH);
         operation.execute(message.getFileName(), IMAGE_DIRECTORY_PATH);
         if (!message.getOperation().equals(REMOVE_IMAGE_SQS_MESSAGE)) {
-            S3Store.putObject(message.getFileName(), IMAGE_DIRECTORY_PATH);
+            putObject(message.getFileName(), IMAGE_DIRECTORY_PATH);
         }
         removeImage(message.getFileName(), IMAGE_DIRECTORY_PATH);
     }
